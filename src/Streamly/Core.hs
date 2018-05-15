@@ -37,7 +37,9 @@ module Streamly.Core
     , serial
     , wSerial
     , async
+    , asyncC
     , wAsync
+    , wAsyncC
     , parallel
 
     -- * Alternative
@@ -735,9 +737,17 @@ joinStreamVarPar style m1 m2 = Stream $ \svr stp sng yld ->
 async :: MonadAsync m => Stream m a -> Stream m a -> Stream m a
 async = joinStreamVar2 (SVarStyle Disjunction LIFO)
 
+{-# INLINE asyncC #-}
+asyncC :: MonadAsync m => Stream m a -> Stream m a -> Stream m a
+asyncC = joinStreamVar2 (SVarStyle Conjunction LIFO)
+
 {-# INLINE wAsync #-}
 wAsync :: MonadAsync m => Stream m a -> Stream m a -> Stream m a
 wAsync = joinStreamVar2 (SVarStyle Disjunction FIFO)
+
+{-# INLINE wAsyncC #-}
+wAsyncC :: MonadAsync m => Stream m a -> Stream m a -> Stream m a
+wAsyncC = joinStreamVar2 (SVarStyle Conjunction FIFO)
 
 {-# INLINE parallel #-}
 parallel :: MonadAsync m => Stream m a -> Stream m a -> Stream m a

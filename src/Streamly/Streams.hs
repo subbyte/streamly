@@ -654,7 +654,7 @@ parbind par m f = go m
 
 instance MonadAsync m => Monad (AsyncT m) where
     return = pure
-    (AsyncT m) >>= f = AsyncT $ parbind S.async m (getAsyncT . f)
+    (AsyncT m) >>= f = AsyncT $ parbind S.asyncC m (getAsyncT . f)
 
 ------------------------------------------------------------------------------
 -- Other instances
@@ -730,7 +730,7 @@ instance IsStream WAsyncT where
 -- @since 0.2.0
 {-# INLINE wAsync #-}
 wAsync :: (IsStream t, MonadAsync m) => t m a -> t m a -> t m a
-wAsync m1 m2 = fromStream $ S.wAsync (toStream m1) (toStream m2)
+wAsync m1 m2 = fromStream $ S.wAsyncC (toStream m1) (toStream m2)
 
 instance MonadAsync m => Semigroup (WAsyncT m a) where
     (<>) = wAsync
